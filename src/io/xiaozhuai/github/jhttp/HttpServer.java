@@ -29,7 +29,7 @@ public class HttpServer implements IOnHttpRequest{
         this(80);
     }
 
-    public void service() {
+    public void serv() {
         while (true) {
             Socket socket = null;
             try {
