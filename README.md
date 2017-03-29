@@ -45,7 +45,7 @@ public class Main {
                 }
             });
             System.out.println("Listen on 0.0.0.0:"+PORT);
-            server.service();
+            server.serv();
         } catch (IOException e) {
             e.printStackTrace();
         }
