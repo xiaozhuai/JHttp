@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author : xiaozhuai
@@ -38,6 +39,17 @@ public class HttpServer implements IOnHttpRequest{
                 executorService.execute(new HttpHandler(socket, this));
             } catch (IOException e) {
                 e.printStackTrace();
+                executorService.shutdown();
+                try {
+                    //60s后查看是否结束任务池,
+                    if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
+                    	executorService.shutdownNow(); 
+                    }
+				} catch (InterruptedException ie) {
+					executorService.shutdownNow();
+				    Thread.currentThread().interrupt();
+				}
+
             }
         }
     }
