@@ -129,7 +129,6 @@ public class HttpHandler implements Runnable {
                 int tmpLen;
                 while((tmpLen=fileInput.read(fileBuffer))!=-1){
                     out.write(fileBuffer, 0, tmpLen);
-                    out.flush();
                 }
             }else{
                 List<byte[]> responseBodyFrames = response.getBodyFrames();
