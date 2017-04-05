@@ -2,6 +2,10 @@
 
 [[中文文档](README_CN.md)] [[English README](README.md)]
 
+* author: xiaozhuai
+
+* email: 798047000@qq.com
+
 JHttp is a tiny http server implementation.
 
 It's can parse get query and post form(only x-www-form-urlencoded supported)，
@@ -61,3 +65,9 @@ public class Main {
     }
 }
 ```
+
+# Gratitude
+
+Thanks to these nice people's work. : )
+
+* @py庄稼汉(weihai4099)

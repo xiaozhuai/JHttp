@@ -2,6 +2,10 @@
 
 [[中文文档](README_CN.md)] [[English README](README.md)]
 
+* author: xiaozhuai
+
+* email: 798047000@qq.com
+
 JHttp是一个轻量的的http服务实现。
 
 它可以实现基本的解析get query和post form(只支持x-www-form-urlencoded格式)，
@@ -60,3 +64,9 @@ public class Main {
     }
 }
 ```
+
+# 鸣谢
+
+感谢以下成员的为JHttp所作的贡献。 : )
+
+* @py庄稼汉(weihai4099)
