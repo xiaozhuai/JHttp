@@ -22,23 +22,7 @@ public class HttpResponse {
 
     public void setStatus(int _code){
         code = _code;
-        switch (code){
-            case 200:
-                status = "OK";
-                break;
-            case 403:
-                status = "Forbidden";
-                break;
-            case 404:
-                status = "Not Found";
-                break;
-            case 500:
-                status = "Internal Server Error";
-                break;
-        }
-        if(code!=200){
-            body.append(code+" "+status);
-        }
+        status = HttpStatus.getStatusMsg(code);
     }
 
     public byte[] getBytes(){
