@@ -16,7 +16,7 @@ public class HttpResponse {
     private long contentLength = 0;
 
     private boolean bodyIsFile = false;
-    private InputStream fileInput;
+    private FileInputStream fileInput;
 
     private int code;
     private String status;
@@ -86,9 +86,9 @@ public class HttpResponse {
         file(new FileInputStream(file));
     }
 
-    public void file(InputStream in) throws IOException {
+    public void file(FileInputStream in) throws IOException {
         bodyIsFile = true;
-        contentLength = in.available();
+        contentLength = in.getChannel().size();
         fileInput = in;
     }
 
