@@ -31,10 +31,12 @@ public class HttpServer implements IOnHttpRequest{
     }
 
     public void serv() {
+        HttpLog.I("Listening 0.0.0.0:%d ...", port);
         while (true) {
             Socket socket = null;
             try {
                 socket = serverSocket.accept();
+                HttpLog.D("New socket accepted");
                 socket.setKeepAlive(true);
                 executorService.execute(new HttpHandler(socket, this));
             } catch (IOException e) {
@@ -66,6 +68,7 @@ public class HttpServer implements IOnHttpRequest{
 
     @Override
     public void onRequest(HttpRequest request, HttpResponse response) {
+        HttpLog.I("%s %s", request.getMethod(), request.getUrl());
         String path = request.getPath();
         IHttpRouter router = null;
         if(routerMap.containsKey(path) && (router = routerMap.get(path))!=null ){

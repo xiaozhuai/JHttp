@@ -30,6 +30,7 @@ public class HttpRequest {
 
     private String host = "127.0.0.1";
     private String path = "/";
+    private String url = "/";
     private String getQueryText = "";
 
     private String protocolVersion;
@@ -61,7 +62,8 @@ public class HttpRequest {
          */
         tmp = headerTextList[0].split(" ");
         method = tmp[0];
-        parseUrl(tmp[1]);
+        url = tmp[1];
+        parseUrl();
         protocolVersion = tmp[2];
 
         /**
@@ -88,14 +90,14 @@ public class HttpRequest {
         }
     }
 
-    private void parseUrl(String u){
-        int splitIndex = u.indexOf("?");
+    private void parseUrl(){
+        int splitIndex = url.indexOf("?");
         if(splitIndex>=0){
-            path = u.substring(0, splitIndex);
-            getQueryText = u.substring(splitIndex+1);
+            path = url.substring(0, splitIndex);
+            getQueryText = url.substring(splitIndex+1);
             parseGetQuery();
         }else{
-            path = u;
+            path = url;
         }
     }
 
@@ -129,6 +131,10 @@ public class HttpRequest {
 
     public String getPath() {
         return path;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public String getHost() {

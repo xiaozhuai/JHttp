@@ -61,4 +61,8 @@ public class HttpStatus {
         }
     }
 
+    public static boolean statusSupported(int statusCode){
+        return status.containsKey(statusCode);
+    }
+
 }

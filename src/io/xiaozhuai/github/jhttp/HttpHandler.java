@@ -68,7 +68,7 @@ public class HttpHandler implements Runnable {
              */
             while (true){
                 if(in.read(oneByte)==-1){
-                    out.write(new HttpResponse(500).getBytes());
+                    out.write(new HttpResponse(500).getHeader().getBytes());
                     out.flush();
                     return;
                 }else{
@@ -89,6 +89,7 @@ public class HttpHandler implements Runnable {
             }
             requestHeader = headerBuilder.toString();
             request.setHeader(requestHeader);
+            HttpLog.D("Http header complete, "+requestHeader);
 
             long contentLength = 0;
             List<String> tmp = request.header("Content-Length");
@@ -99,7 +100,7 @@ public class HttpHandler implements Runnable {
                 int len;
                 len=in.read(block);
                 if(len==-1){
-                    out.write(new HttpResponse(500).getBytes());
+                    out.write(new HttpResponse(500).getHeader().getBytes());
                     out.flush();
                     return;
                 }else{
@@ -109,7 +110,7 @@ public class HttpHandler implements Runnable {
             }
             requestBody = bodyBuilder.toString();
             request.setBody(requestBody);
-
+            HttpLog.D("Http body complete");
 
             /**
              * generate a new response
@@ -120,19 +121,29 @@ public class HttpHandler implements Runnable {
              * callback to get response data
              */
             mOnRequest.onRequest(request, response);
-            byte[] output = response.getBytes();
-
-            /**
-             * write response data
-             */
-            out.write(output);
+            byte[] responseHeader = response.getHeader().getBytes();
+            out.write(responseHeader);
+            if(response.isFile()){
+                byte[] fileBuffer = new byte[10240];
+                InputStream fileInput = response.getFileInput();
+                int tmpLen;
+                while((tmpLen=fileInput.read(fileBuffer))!=-1){
+                    out.write(fileBuffer, 0, tmpLen);
+                    out.flush();
+                }
+            }else{
+                List<byte[]> responseBodyFrames = response.getBodyFrames();
+                for(int i=0; i<responseBodyFrames.size(); i++){
+                    out.write(responseBodyFrames.get(i));
+                }
+            }
             out.flush();
 
 
         } catch (Exception e) {
             e.printStackTrace();
             try{
-                out.write(new HttpResponse(500).getBytes());
+                out.write(new HttpResponse(500).getHeader().getBytes());
                 out.flush();
             }catch (Exception e2){
                 e2.printStackTrace();
