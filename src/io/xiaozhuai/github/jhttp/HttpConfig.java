@@ -9,13 +9,9 @@ import java.util.Map;
  */
 public class HttpConfig {
 
-    public interface CustomPageAction{
-        void onCustomPage(HttpRequest request, HttpResponse response);
-    }
+    public static Map<Integer, IHttpRouter> customPageActionHashMap = new HashMap<>();
 
-    public static Map<Integer, CustomPageAction> customPageActionHashMap = new HashMap<>();
-
-    public static void addCustomPageAction(int statusCode, CustomPageAction action){
+    public static void addCustomPageAction(int statusCode, IHttpRouter action){
         customPageActionHashMap.put(statusCode, action);
     }
 
