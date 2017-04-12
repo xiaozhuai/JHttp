@@ -36,9 +36,9 @@ public class Main {
         HttpLog.setLogLevel(HttpLog.LOG_LEVEL_DEBUG); //LOG_LEVEL_INFO by default
 
         // when 404 occured, use this to define a custom err page is a good idea
-        HttpConfig.addCustomPageAction(404, new HttpConfig.CustomPageAction() {
+        HttpConfig.addCustomPageAction(404, new IHttpRouter() {
             @Override
-            public void onCustomPage(HttpRequest request, HttpResponse response) {
+            public void onRoute(HttpRequest request, HttpResponse response) {
                 response.append("404 Not Found, Powered by JHttp");
             }
         });
