@@ -11,6 +11,15 @@ public class Main {
 
     public static void main(String[] args) {
         HttpLog.setLogLevel(HttpLog.LOG_LEVEL_DEBUG); //LOG_LEVEL_INFO by default
+
+        // when 404 occured, use this to define a custom err page is a good idea
+        HttpConfig.addCustomPageAction(404, new HttpConfig.CustomPageAction() {
+            @Override
+            public void onCustomPage(HttpRequest request, HttpResponse response) {
+                response.append("404 Not Found, Powered by JHttp");
+            }
+        });
+
         try {
             server = new HttpServer(PORT);
 

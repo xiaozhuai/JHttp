@@ -121,6 +121,11 @@ public class HttpHandler implements Runnable {
              * callback to get response data
              */
             mOnRequest.onRequest(request, response);
+            int statusCode = response.getStatus();
+            if(statusCode!=200 && statusCode!=204 && HttpConfig.customPageActionHashMap.containsKey(statusCode)){
+                HttpConfig.customPageActionHashMap.get(statusCode).onCustomPage(request, response);
+            }
+
             byte[] responseHeader = response.getHeader().getBytes();
             out.write(responseHeader);
             if(response.isFile()){

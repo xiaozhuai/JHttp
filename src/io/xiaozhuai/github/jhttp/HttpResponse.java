@@ -19,7 +19,8 @@ public class HttpResponse {
     private FileInputStream fileInput;
 
     private int code;
-    private String status;
+
+    private String statusMsg;
     private List<String> headerLines = new ArrayList<>();
 
     public HttpResponse(){
@@ -32,7 +33,11 @@ public class HttpResponse {
 
     public void setStatus(int _code){
         code = HttpStatus.statusSupported(_code) ? _code : 500;
-        status = HttpStatus.getStatusMsg(code);
+        statusMsg = HttpStatus.getStatusMsg(code);
+    }
+
+    public int getStatus() {
+        return code;
     }
 
     public List<byte[]> getBodyFrames(){
@@ -40,7 +45,7 @@ public class HttpResponse {
     }
 
     public String getHeader(){
-        headerBuilder.append(String.format("HTTP/1.1 %d %s\r\n", code, status));
+        headerBuilder.append(String.format("HTTP/1.1 %d %s\r\n", code, statusMsg));
         if(contentLength!=0) header("Content-Length", Long.toString(contentLength));
         header("Connection: keep-alive");
         header("Server", Version.name+"/"+Version.version);
