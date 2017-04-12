@@ -1,14 +1,12 @@
 package io.xiaozhuai.github.jhttp;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.ProtocolFamily;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 /**
  * @author : xiaozhuai
@@ -34,6 +32,8 @@ public class HttpRequest {
     private String getQueryText = "";
 
     private String protocolVersion;
+
+    private Matcher pathinfo;
 
 
     public HttpRequest(){
@@ -179,5 +179,13 @@ public class HttpRequest {
         }else{
             return defaultValue;
         }
+    }
+
+    public void setPathinfo(Matcher pathinfo) {
+        this.pathinfo = pathinfo;
+    }
+
+    public Matcher getPathinfo() {
+        return pathinfo;
     }
 }

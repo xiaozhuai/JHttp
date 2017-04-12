@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author : xiaozhuai
@@ -57,9 +59,14 @@ public class HttpServer implements IOnHttpRequest{
     }
 
     private Map<String, IHttpRouter> routerMap = new HashMap<>();
+    private Map<String, IHttpRouter> regexRouterMap = new HashMap<>();
 
     public void addRouter(String routerPath, IHttpRouter action){
         routerMap.put(routerPath, action);
+    }
+
+    public void addRouterRegex(String regex, IHttpRouter action){
+        regexRouterMap.put(regex, action);
     }
 
     public void removeRouter(String routerPath){
@@ -71,10 +78,27 @@ public class HttpServer implements IOnHttpRequest{
         HttpLog.I("%s %s", request.getMethod(), request.getUrl());
         String path = request.getPath();
         IHttpRouter router = null;
+
+        // 优先全路径匹配路由
         if(routerMap.containsKey(path) && (router = routerMap.get(path))!=null ){
             router.onRoute(request, response);
-        }else{
-            response.setStatus(404);
+            return;
         }
+
+        // 正则匹配路由
+        for (Map.Entry<String, IHttpRouter> entry : regexRouterMap.entrySet()) {
+            String regex = entry.getKey();
+            if(path.matches(regex)){
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(path);
+                matcher.find();
+                request.setPathinfo(matcher);
+                entry.getValue().onRoute(request, response);
+                return;
+            }
+        }
+
+        // 无匹配结果则404
+        response.setStatus(404);
     }
 }

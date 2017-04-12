@@ -13,12 +13,25 @@ public class Main {
         HttpLog.setLogLevel(HttpLog.LOG_LEVEL_DEBUG); //LOG_LEVEL_INFO by default
         try {
             server = new HttpServer(PORT);
+
+            // example route
             server.addRouter("/", new IHttpRouter() {
                 @Override
                 public void onRoute(HttpRequest request, HttpResponse response) {
                     response.append("hello");
                 }
             });
+
+            // example regex route
+            server.addRouterRegex("/article/(\\w+)", new IHttpRouter() {
+                @Override
+                public void onRoute(HttpRequest request, HttpResponse response) {
+                    String action = request.getPathinfo().group(1); // (\\w+) maybe add, delete, read, etc...
+                    response.append(action+" an artical");
+                }
+            });
+
+            // example get query
             server.addRouter("/user", new IHttpRouter() {
                 @Override
                 public void onRoute(HttpRequest request, HttpResponse response) {
@@ -26,6 +39,8 @@ public class Main {
                     response.append("hello, "+user);
                 }
             });
+
+            // example response file
             server.addRouter("/file", new IHttpRouter() {
                 @Override
                 public void onRoute(HttpRequest request, HttpResponse response) {
@@ -37,6 +52,8 @@ public class Main {
                     }
                 }
             });
+
+
             server.serv();
         } catch (IOException e) {
             e.printStackTrace();
