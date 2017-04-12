@@ -86,12 +86,13 @@ public class HttpServer implements IOnHttpRequest{
         }
 
         // 正则匹配路由
+        Pattern pattern;
+        Matcher matcher;
         for (Map.Entry<String, IHttpRouter> entry : regexRouterMap.entrySet()) {
             String regex = entry.getKey();
-            if(path.matches(regex)){
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(path);
-                matcher.find();
+            pattern = Pattern.compile(regex);
+            matcher = pattern.matcher(path);
+            if(matcher.find()){
                 request.setPathinfo(matcher);
                 entry.getValue().onRoute(request, response);
                 return;
