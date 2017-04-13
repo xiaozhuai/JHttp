@@ -20,6 +20,7 @@ public class HttpServer implements IOnHttpRequest{
     private ServerSocket serverSocket = null;
     private ExecutorService executorService;
     private static final int POOL_MULTIPLE = 4;
+    private boolean listening = false;
 
     public HttpServer(int _port) throws IOException {
         port = _port;
@@ -34,7 +35,8 @@ public class HttpServer implements IOnHttpRequest{
 
     public void serv() {
         HttpLog.I("Listening 0.0.0.0:%d ...", port);
-        while (true) {
+        listening = true;
+        while (listening) {
             Socket socket = null;
             try {
                 socket = serverSocket.accept();
@@ -56,6 +58,15 @@ public class HttpServer implements IOnHttpRequest{
 
             }
         }
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void stop(){
+        listening = false;
     }
 
     private Map<String, IHttpRouter> routerMap = new HashMap<>();
