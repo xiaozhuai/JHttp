@@ -84,7 +84,9 @@ public class Main {
                 }
             });
 
-
+            //example Controller
+            server.addRouterRegex("/comment/(\\w+)", new ExampleCommentController());
+            
             server.serv();
         } catch (IOException e) {
             e.printStackTrace();
