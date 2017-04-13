@@ -105,4 +105,8 @@ public class HttpResponse {
         return fileInput;
     }
 
+    public long getContentLength() {
+        return contentLength;
+    }
+
 }

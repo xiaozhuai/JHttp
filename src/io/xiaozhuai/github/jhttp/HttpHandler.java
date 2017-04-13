@@ -122,7 +122,9 @@ public class HttpHandler implements Runnable {
              */
             mOnRequest.onRequest(request, response);
             int statusCode = response.getStatus();
-            if(statusCode!=200 && statusCode!=204 && HttpConfig.customPageActionHashMap.containsKey(statusCode)){
+            if(statusCode!=200 && statusCode!=204
+                    && HttpConfig.customPageActionHashMap.containsKey(statusCode)
+                    && response.getContentLength()==0){
                 HttpConfig.customPageActionHashMap.get(statusCode).onRoute(request, response);
             }
 

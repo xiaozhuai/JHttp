@@ -58,7 +58,7 @@ public class Main {
                 @Override
                 public void onRoute(HttpRequest request, HttpResponse response) {
                     String action = request.getPathinfo().group(1); // (\\w+) maybe add, delete, read, etc...
-                    response.append(action+" an artical");
+                    response.append(action+" an article");
                 }
             });
 
