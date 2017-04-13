@@ -27,7 +27,6 @@ public class HttpController implements IHttpRouter{
             Method method = getClass().getMethod(action);
             method.invoke(this);
         } catch (Exception e) {
-            e.printStackTrace();
             response.setStatus(404);
         }
 
