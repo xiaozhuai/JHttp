@@ -12,7 +12,7 @@ It's can parse get query and post form(only x-www-form-urlencoded supported)，
 and it provided a simple router.
 
 Do not use it in the project which need high efficiency, 
-because it's base on multi-thread and no event-driven support.（same as apache）
+because it's base on thread-pool and no event-driven support.（same as apache）
 
 But you can use it on an Android application.
 
