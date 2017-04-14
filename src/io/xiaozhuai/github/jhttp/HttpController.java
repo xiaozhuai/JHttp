@@ -18,7 +18,7 @@ public class HttpController implements IHttpRouter{
         Matcher pathinfo = request.getPathinfo();
         String action = null;
         if (pathinfo != null && pathinfo.groupCount() != 0)
-            action = pathinfo.group(1);
+            action = pathinfo.group("action");
         if (action == null) {
             response.setStatus(404);
             return;

@@ -62,8 +62,8 @@ public class Main {
                 }
             });
 
-            //example Controller
-            server.addController("/comment/(\\w+)", ExampleCommentController.class);
+            //example Controller, "?<action>" marked group will be action method name
+            server.addController("/comment/(?<action>\\w+)", ExampleCommentController.class);
 
             server.serv();
         } catch (IOException e) {
