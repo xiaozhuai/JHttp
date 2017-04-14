@@ -71,6 +71,7 @@ public class HttpServer implements IOnHttpRequest{
 
     private Map<String, IHttpRouter> routerMap = new HashMap<>();
     private Map<String, IHttpRouter> regexRouterMap = new HashMap<>();
+    private Map<String, Class<?>> controllerMap = new HashMap<>();
 
     public void addRouter(String routerPath, IHttpRouter action){
         routerMap.put(routerPath, action);
@@ -78,6 +79,10 @@ public class HttpServer implements IOnHttpRequest{
 
     public void addRouterRegex(String regex, IHttpRouter action){
         regexRouterMap.put(regex, action);
+    }
+
+    public void addController(String regex, Class<?> clazz){
+        controllerMap.put(regex, clazz);
     }
 
     public void removeRouter(String routerPath){
@@ -107,6 +112,25 @@ public class HttpServer implements IOnHttpRequest{
                 request.setPathinfo(matcher);
                 entry.getValue().onRoute(request, response);
                 return;
+            }
+        }
+
+        // 正则匹配控制器
+        for (Map.Entry<String, Class<?>> entry : controllerMap.entrySet()) {
+            String regex = entry.getKey();
+            pattern = Pattern.compile(regex);
+            matcher = pattern.matcher(path);
+            if(matcher.find()){
+                try {
+                    HttpController controller = (HttpController) entry.getValue().newInstance();
+                    request.setPathinfo(matcher);
+                    controller.onRoute(request, response);
+                    return;
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
